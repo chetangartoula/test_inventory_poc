@@ -136,3 +136,8 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .histor
+
+data_map.txt
+
+
+inventory/migrations/
