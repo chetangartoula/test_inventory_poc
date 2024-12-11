@@ -170,17 +170,18 @@ class StockManager(object):
         index = 0
         
         for stock_out in stock_out_map:
+            # breakpoint()
             out_date = stock_out['date']
             out_quantity = stock_out['quantity']
-            for _ in range(len(stock_in_map)):
-                if index > len(stock_in_map)-1:
+            for _ in range(len(stock_in_map)+1):
+                if index > len(stock_in_map) - 1 :
                     break
                 stock_in = stock_in_map[index]
                 in_date = stock_in['date']
                 in_quantity = stock_in['quantity']
                 
                 # true condition: eg: 2024-12-01 < 2024-12-02
-                if in_date < out_date:
+                if in_date <= out_date:
                     index += 1
                     units_before = units_after
                     units_after = units_before + in_quantity
@@ -221,7 +222,7 @@ class StockInApi(APIView, StockManager):
     def get(self, request, *args, **kwargs):
         query = self.get_queryset()
         serializer = self.serializer_class(query, many=True)
-        self.manipulate_stock_v1(product_code="01ab")
+        self.manipulate_stock_v1(product_code="ab12")
         return Response(serializer.data)
     
     def post(self, request, *args, **kwargs):
@@ -244,6 +245,11 @@ class StockOutApi(APIView):
     
     def get_queryset(self):
         return StockOutflow.objects.all()
+    
+    def get(self, request, *args, **kwargs):
+        query = self.get_queryset()
+        serializer = self.serializer_class(query, many=True)
+        return Response(serializer.data)
     
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
