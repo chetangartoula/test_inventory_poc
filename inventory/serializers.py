@@ -123,3 +123,11 @@ class StockOutSerializer(serializers.Serializer):
         obj = StockOutflow.objects.create(**validated_data)
 
         return obj
+    
+    
+    
+class StockFlowSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = StockFlowTransitionLog
+        fields = "__all__"

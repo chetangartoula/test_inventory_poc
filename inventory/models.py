@@ -29,6 +29,9 @@ class StockInflow(models.Model):
         default=False
     )  # New field to indicate manual entry
     unique_combined_number = models.CharField(
+        max_length=255, null=True, blank=True
+    )
+    sequence_number = models.CharField(
         max_length=255, unique=True, null=True, blank=True
     )
     type = models.CharField(max_length=50)  # New field for stock type
@@ -36,13 +39,15 @@ class StockInflow(models.Model):
     factor = models.FloatField(default=1.0)
     # New field for batch use by date
     batch_use_by_date = models.DateField(null=True, blank=True, default=None)
+    batch_number = models.IntegerField(default=1)
     # Adding the manual entry type field
     manual_entry_type = models.CharField(
         max_length=50,
         null=True,
         blank=True,
         choices=[("last", "Last"), ("specific", "Specific")],
-    )
+    )    
+
 
 class StockOutflow(models.Model):
     article_code = models.CharField(max_length=200)
@@ -99,6 +104,7 @@ class StockFlowTransitionLog(models.Model):
     units_after = models.FloatField(
         null=True, blank=True
     )  # Represents combined quantity/weight value
+    stock_batches = models.JSONField(default=list)    
     registered_units = models.FloatField(null=True, default=0)
     type = models.CharField(max_length=50)
     batch_number_stock_in = models.CharField(
